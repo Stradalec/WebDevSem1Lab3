@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
-
+import { InputColumn } from './Input_column'
+import { AddButton } from './addButton'
 function App() {
   const [count, setCount] = useState(0)
   const tasksReducer = (tasks, { type, title, description }) => {
@@ -19,11 +20,8 @@ function App() {
     <header></header>
     <main className="main">
       <section className="input_row">
-        <div className="input_column">
-          <input type="text" placeholder="Название" />
-          <input type="text" placeholder="Описание" />
-        </div>
-        <button id = "add" type="button" value="button" className="button_add">+</button>
+        <InputColumn />
+        <AddButton id = "add" className="button_add" />
       </section>
       <section className="no_task_window">
         <div></div>
