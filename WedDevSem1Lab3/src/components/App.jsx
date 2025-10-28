@@ -2,60 +2,43 @@ import { useState } from 'react'
 import './App.css'
 import { InputColumn } from './Input_column'
 import { AddButton } from './addButton'
+import { Section } from './sectionBuilder'
+
+
+
+
+
 function App() {
   const [count, setCount] = useState(0)
-  const tasksReducer = (tasks, { type, title, description }) => {
-    switch(type) {
-      case 'added': {
-      return [...tasks, { title, description }]
-      }
-      default: {
-
-      }
-  }
-} 
 
   return (
     <>
     <header></header>
     <main className="main">
-      <section className="input_row">
+      <Section className={"input_row"}>
         <InputColumn />
-        <AddButton id = "add" className="button_add" />
-      </section>
-      <section className="no_task_window">
+        <AddButton id = "add" className="button_add" content={"+"} />
+      </Section>
+      <Section className={"no_task_window"}>
         <div></div>
         <p>Нет задач</p>
         <div></div>
-      </section>
-      <section className="dialog_window">
+      </Section>
+      <Section className={"dialog_window"}>
         <p>Удалить задачу?</p>
          <div className="input_row_close">
-          <button id = "delete_confirm" type="button" value="button" className="button_dialog">
-            Да
-          </button>
-          <button id = "delete_cancel" type="button" value="button" className="button_dialog">
-            Нет
-          </button>
+          <AddButton id = "delete_confirm" className="button_dialog" content={"Да"} />
+          <AddButton id = "delete_cancel" className="button_dialog" content={"Нет"} />
         </div>
-      </section>
-      <section className="share_window">
-        <button type="button" value="button" className="button_share">
-          <img src="assets/vector/copy.svg" alt="Удалить заметку" />
-        </button>
-        <button type="button" value="button" className="button_share">
-          <img src="assets/vector/vk.svg" alt="Поделиться" />
-        </button>
-        <button type="button" value="button" className="button_share">
-          <img src="assets/vector/telegram.svg" alt="Редактировать заметку" />
-        </button>
-        <button type="button" value="button" className="button_share">
-          <img src="assets/vector/whatsapp.svg" alt="Информация о заметке" />
-        </button>
-        <button type="button" value="button" className="button_share">
-          <img src="assets/vector/facebook.svg" alt="Поделиться заметкой" />
-        </button>
-      </section>
+      </Section>
+      <Section className={"share_window"}>
+        <AddButton id = "copy" className="button_share" content={<img src="src/assets/vector/copy.svg" alt="Копировать заметку" />}>  </AddButton>
+        <AddButton id = "vk" className="button_share" content={<img src="src/assets/vector/vk.svg" alt="Поделиться в VK" /> }> </AddButton>
+        <AddButton id = "tg" className="button_share" content={<img src="src/assets/vector/telegram.svg" alt="Поделиться в Telegram" />}>  </AddButton>
+        <AddButton id = "wp" className="button_share" content={<img src="src/assets/vector/whatsapp.svg" alt="Поделиться в Whatsapp" />}>  </AddButton>
+        <AddButton id = "fb" className="button_share" content={<img src="src/assets/vector/facebook.svg" alt="Поделиться в Facebook" /> }> </AddButton>
+      </Section>
+
     </main>
     <footer></footer>
     </>
