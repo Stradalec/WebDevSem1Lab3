@@ -1,5 +1,5 @@
-export function AddButton({id, className, onClick}){
+export function AddButton({id, className, content, onClick}){
     return(
-        <button id = {id}  className={className} onClick={onClick}>+</button>
+        <button id = {id}  className={className} onClick={onClick}>{content}</button>
     );
 }
