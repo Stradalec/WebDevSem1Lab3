@@ -11,13 +11,16 @@ import { Section } from './sectionBuilder'
 function App() {
   const [count, setCount] = useState(0)
 
+  function handleAddClick(){
+    console.log("Нажми на кнопку - получишь результат")
+  }
   return (
     <>
     <header></header>
     <main className="main">
       <Section className={"input_row"}>
         <InputColumn />
-        <AddButton id = "add" className="button_add" content={"+"} />
+        <AddButton id = "add" className="button_add" content={"+"} onClick={handleAddClick} />
       </Section>
       <Section className={"no_task_window"}>
         <div></div>
