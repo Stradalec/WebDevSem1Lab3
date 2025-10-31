@@ -8,7 +8,7 @@ import { Section } from './sectionBuilder'
 function App() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [isPanelVisible, setPanelVisibility] = useState(false);
+  const [isPanelVisible, setPanelVisibility] = useState(true);
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('tasks');
     return saved ? JSON.parse(saved) : [];
