@@ -8,6 +8,7 @@ import { Section } from './sectionBuilder'
 function App() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [isPanelVisible, setPanelVisibility] = useState(false);
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('tasks');
     return saved ? JSON.parse(saved) : [];
@@ -32,6 +33,11 @@ function App() {
     console.log("Attero, Dominatus!")
     const newTaskList = setTasks(currentTasks => currentTasks.filter(task => task.id !== id));
     localStorage.setItem("tasks", JSON.stringify(newTaskList));
+  }
+
+  function handleShowButtonsClick(){
+    console.log("I am only human, after all")
+    setPanelVisibility(prev => !prev);
   }
 
   return (
@@ -64,12 +70,22 @@ function App() {
         <AddButton id = "wp" className="button_share" content={<img src="src/assets/vector/whatsapp.svg" alt="Поделиться в Whatsapp" />}>  </AddButton>
         <AddButton id = "fb" className="button_share" content={<img src="src/assets/vector/facebook.svg" alt="Поделиться в Facebook" /> }> </AddButton>
       </Section>
-      {tasks.map(task => (<Section key={task.id} className={"task_window"}>
-        {<AddButton id = {task.id} className="task_window_button" content={null}> <h2>{task.title}</h2>
+      {tasks.map(task => (
+      <>
+      <Section key={task.id} className={"task_window"}>
+        {<AddButton id = {task.id} className="task_window_button" content={null} onClick={handleShowButtonsClick}> <h2>{task.title}</h2>
         <p>{task.description}</p> </AddButton>}
         
         {<AddButton id = {task.id} className="button_task_delete" content={<img src="src/assets/pictures/delete.svg" alt="Удалить заметку" /> } onClick={() =>handleDeleteClick(task.id)}></AddButton>}
-      </Section>))}
+      </Section>
+      {isPanelVisible == task.id && (<Section key={task.id} className={"input_row_right"} style={{ display: isPanelVisible ? 'flex' : 'none' }}>
+        {<AddButton id = {task.id} className="button_task_edit" content={<img src="src/assets/pictures/edit.svg" alt="Редактировать заметку" /> } ></AddButton>}
+        {<AddButton id = {task.id} className="button_task_info" content={<img src="src/assets/pictures/info.svg" alt="Информация о заметке" /> } ></AddButton>}
+        {<AddButton id = {task.id} className="button_task_share" content={<img src="src/assets/pictures/share.svg" alt="Поделиться заметкой" /> } ></AddButton>}
+      </Section>)}
+      
+      </>
+      ))}
 
     </main>
     <footer></footer>
