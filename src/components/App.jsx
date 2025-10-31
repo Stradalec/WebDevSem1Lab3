@@ -42,11 +42,14 @@ function App() {
         <InputColumn titleValue={title} descriptionValue={description} onTitleChange={e => setTitle(e.target.value)} onDescriptionChange={e => setDescription(e.target.value)} />
         <AddButton id = "add" className="button_add" content={"+"} onClick={handleAddClick} />
       </Section>
-      <Section className={"no_task_window"}>
+      {tasks.length == 0 &&(
+        <Section className={"no_task_window"}>
         <div></div>
         <p>Нет задач</p>
         <div></div>
       </Section>
+      )}
+      
       <Section className={"dialog_window"}>
         <p>Удалить задачу?</p>
          <div className="input_row_close">
@@ -65,7 +68,7 @@ function App() {
         {<AddButton id = {task.id} className="task_window_button" content={null}> <h2>{task.title}</h2>
         <p>{task.description}</p> </AddButton>}
         
-        {<AddButton id = {task.id} className="button_task_delete" content={<img src="src/assets/pictures/delete.svg" alt="Поделиться в Facebook" /> } onClick={() =>handleDeleteClick(task.id)}></AddButton>}
+        {<AddButton id = {task.id} className="button_task_delete" content={<img src="src/assets/pictures/delete.svg" alt="Удалить заметку" /> } onClick={() =>handleDeleteClick(task.id)}></AddButton>}
       </Section>))}
 
     </main>
