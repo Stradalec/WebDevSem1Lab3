@@ -4,22 +4,31 @@ import { InputColumn } from './Input_column'
 import { AddButton } from './addButton'
 import { Section } from './sectionBuilder'
 
-
-
-
-
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem('tasks');
+    return saved ? JSON.parse(saved) : [];
+  });
   function handleAddClick(){
     console.log("Нажми на кнопку - получишь результат")
+    const newTask = {
+      id: tasks.length,
+      title: title || 'Неизвестен',
+      description: description || 'Без названия',
+    };
+
+    setTasks([...tasks,newTask])
+    setTitle('')
+    setDescription('')
   }
   return (
     <>
     <header></header>
     <main className="main">
       <Section className={"input_row"}>
-        <InputColumn />
+        <InputColumn titleValue={title} descriptionValue={description} onTitleChange={e => setTitle(e.target.value)} onDescriptionChange={e => setDescription(e.target.value)} />
         <AddButton id = "add" className="button_add" content={"+"} onClick={handleAddClick} />
       </Section>
       <Section className={"no_task_window"}>
@@ -41,6 +50,12 @@ function App() {
         <AddButton id = "wp" className="button_share" content={<img src="src/assets/vector/whatsapp.svg" alt="Поделиться в Whatsapp" />}>  </AddButton>
         <AddButton id = "fb" className="button_share" content={<img src="src/assets/vector/facebook.svg" alt="Поделиться в Facebook" /> }> </AddButton>
       </Section>
+      {tasks.map(task => (<Section key={task.id} className={"task_window"}>
+        {<AddButton id = {task.id} className="task_window_button" content={null}> <h2>{task.title}</h2>
+        <p>{task.description}</p> </AddButton>}
+        
+        {<AddButton id = {task.id} className="button_task_delete" content={<img src="src/assets/pictures/delete.svg" alt="Поделиться в Facebook" /> }></AddButton>}
+      </Section>))}
 
     </main>
     <footer></footer>
