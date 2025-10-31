@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { InputColumn } from './Input_column'
 import { AddButton } from './addButton'
@@ -12,6 +12,9 @@ function App() {
     const saved = localStorage.getItem('tasks');
     return saved ? JSON.parse(saved) : [];
   });
+  useEffect(()=>{
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+  }, [tasks])
   function handleAddClick(){
     console.log("Нажми на кнопку - получишь результат")
     const newTask = {
@@ -24,10 +27,13 @@ function App() {
     setTitle('')
     setDescription('')
   }
+
   function handleDeleteClick(id){
     console.log("Attero, Dominatus!")
-    setTasks(currentTasks => currentTasks.filter(task => task.id !== id));
+    const newTaskList = setTasks(currentTasks => currentTasks.filter(task => task.id !== id));
+    localStorage.setItem("tasks", JSON.stringify(newTaskList));
   }
+
   return (
     <>
     <header></header>
