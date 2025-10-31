@@ -4,6 +4,7 @@ import { InputColumn } from './Input_column'
 import { AddButton } from './addButton'
 import { Section } from './sectionBuilder'
 
+
 function App() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -22,6 +23,10 @@ function App() {
     setTasks([...tasks,newTask])
     setTitle('')
     setDescription('')
+  }
+  function handleDeleteClick(id){
+    console.log("Attero, Dominatus!")
+    setTasks(currentTasks => currentTasks.filter(task => task.id !== id));
   }
   return (
     <>
@@ -54,7 +59,7 @@ function App() {
         {<AddButton id = {task.id} className="task_window_button" content={null}> <h2>{task.title}</h2>
         <p>{task.description}</p> </AddButton>}
         
-        {<AddButton id = {task.id} className="button_task_delete" content={<img src="src/assets/pictures/delete.svg" alt="Поделиться в Facebook" /> }></AddButton>}
+        {<AddButton id = {task.id} className="button_task_delete" content={<img src="src/assets/pictures/delete.svg" alt="Поделиться в Facebook" /> } onClick={() =>handleDeleteClick(task.id)}></AddButton>}
       </Section>))}
 
     </main>
