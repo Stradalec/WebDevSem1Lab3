@@ -171,7 +171,6 @@ textarea:focus {
 }
 
 .dialog_window {
-  display: none;
   position: fixed;
   top: 40%;
   height: 250px;
