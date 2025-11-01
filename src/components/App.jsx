@@ -10,7 +10,7 @@ function App() {
   const [isPanelVisible, setPanelVisibility] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isShareVisible, setShareVisible] = useState(false);
-  const [savedTaskId, setSavedTaskId] = useState(0)
+  const [savedTaskId, setSavedTaskId] = useState(0);
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("tasks");
     return saved ? JSON.parse(saved) : [];
@@ -31,14 +31,81 @@ function App() {
     setDescription("");
   }
 
-  function changeModalVisibility(id){
+  function changeModalVisibility(id) {
     setModalVisible((prev) => !prev);
     setSavedTaskId(id);
   }
 
-  function changeShareVisibility(id){
-    setShareVisible((prev) => !prev)
-    setSavedTaskId(id)
+  function changeShareVisibility(id) {
+    setShareVisible((prev) => !prev);
+    setSavedTaskId(id);
+  }
+
+  function shareClick(socialPlatform) {
+    let shareUrl
+    console.log(socialPlatform)
+    console.log(savedTaskId);
+    const targetTask = tasks.find((task) => task.id == savedTaskId);
+    console.log(targetTask.title);
+    const encodedStart = encodeURIComponent(
+      "Делитесь своими бессмысленными заметками вместе с нами!"
+    );
+    const encodedHeader = encodeURIComponent(targetTask.title);
+    const encodedDescription = encodeURIComponent(targetTask.description);
+    const encodedCloser = encodeURIComponent(
+      "Stradalets зачем-то добавил эту функциональность в свою лабораторную работу. Вот ему делать нечего..."
+    );
+    switch (socialPlatform) {
+      case "copy":
+        navigator.clipboard.writeText(
+          targetTask.title + " " + targetTask.description
+        );
+        break;
+      case "vk":
+        shareUrl =
+          "https://vk.com/share.php?text=" +
+          encodedHeader +
+          "%20" +
+          encodedDescription; //Оно не работает, т.к. поле комментария пустое. Я старался
+        break;
+      case "tg":
+        console.log("Попал в телеграм")
+        shareUrl =
+          "https://t.me/share/url?url=" +
+          encodedStart +
+          "&text=" +
+          encodedHeader +
+          " " +
+          encodedDescription +
+          "%0A" +
+          encodedCloser;
+        break;
+      case "wp":
+        shareUrl =
+          "https://api.whatsapp.com/send?text=" +
+          encodedHeader +
+          "%20" +
+          encodedDescription;
+        break;
+      case "fc":
+        shareUrl =
+          "https://www.facebook.com/sharer/sharer.php?u=" +
+          encodedHeader +
+          "&quote=" +
+          encodedDescription;
+        break;
+      default:
+        return;
+    }
+    if(socialPlatform != "copy"){
+      window.open(shareUrl, "_blank");
+    }
+    else {
+      
+    } 
+    
+    setSavedTaskId(-1);
+    setShareVisible((prev) => !prev);
   }
 
   function ConfirmDeleteClick() {
@@ -47,12 +114,12 @@ function App() {
     const newTaskList = setTasks((currentTasks) =>
       currentTasks.filter((task) => task.id !== savedTaskId)
     );
-    setSavedTaskId(-1)
+    setSavedTaskId(-1);
     localStorage.setItem("tasks", JSON.stringify(newTaskList));
   }
 
-  function CancelDeleteClick(){
-    setSavedTaskId(-1)
+  function CancelDeleteClick() {
+    setSavedTaskId(-1);
     setModalVisible((prev) => !prev);
   }
 
@@ -86,82 +153,90 @@ function App() {
             <div></div>
           </Section>
         )}
-        {isModalVisible && (<Section className={"dialog_window"} style={{ display: isModalVisible ? "flex" : "none" }}>
-          <p>Удалить задачу?</p>
-          <div className="input_row_close">
+        {isModalVisible && (
+          <Section
+            className={"dialog_window"}
+            style={{ display: isModalVisible ? "flex" : "none" }}
+          >
+            <p>Удалить задачу?</p>
+            <div className="input_row_close">
+              <AddButton
+                id="delete_confirm"
+                className="button_dialog"
+                content={"Да"}
+                onClick={() => ConfirmDeleteClick()}
+              />
+              <AddButton
+                id="delete_cancel"
+                className="button_dialog"
+                content={"Нет"}
+                onClick={() => CancelDeleteClick()}
+              />
+            </div>
+          </Section>
+        )}
+        {isShareVisible && (
+          <Section
+            className={"share_window"}
+            style={{ display: isShareVisible ? "flex" : "none" }}
+          >
             <AddButton
-              id="delete_confirm"
-              className="button_dialog"
-              content={"Да"}
-              onClick={() =>ConfirmDeleteClick()}
-            />
+              id="copy"
+              className="button_share"
+              content={
+                <img
+                  src="src/assets/vector/copy.svg"
+                  alt="Копировать заметку"
+                />
+              }
+              onClick={(event) => shareClick(event.currentTarget.id)}
+            ></AddButton>
             <AddButton
-              id="delete_cancel"
-              className="button_dialog"
-              content={"Нет"}
-              onClick={() => CancelDeleteClick()}
-            />
-          </div>
-        </Section>)}        
-        {isShareVisible && (<Section className={"share_window"} style={{ display: isShareVisible ? "flex" : "none" }}>
-          <AddButton
-            id="copy"
-            className="button_share"
-            content={
-              <img src="src/assets/vector/copy.svg" alt="Копировать заметку" />
-            }
-          >
-            {" "}
-          </AddButton>
-          <AddButton
-            id="vk"
-            className="button_share"
-            content={
-              <img src="src/assets/vector/vk.svg" alt="Поделиться в VK" />
-            }
-          >
-            {" "}
-          </AddButton>
-          <AddButton
-            id="tg"
-            className="button_share"
-            content={
-              <img
-                src="src/assets/vector/telegram.svg"
-                alt="Поделиться в Telegram"
-              />
-            }
-          >
-            {" "}
-          </AddButton>
-          <AddButton
-            id="wp"
-            className="button_share"
-            content={
-              <img
-                src="src/assets/vector/whatsapp.svg"
-                alt="Поделиться в Whatsapp"
-              />
-            }
-          >
-            {" "}
-          </AddButton>
-          <AddButton
-            id="fb"
-            className="button_share"
-            content={
-              <img
-                src="src/assets/vector/facebook.svg"
-                alt="Поделиться в Facebook"
-              />
-            }
-          >
-            {" "}
-          </AddButton>
-        </Section>)}
-        
+              id="vk"
+              className="button_share"
+              content={
+                <img src="src/assets/vector/vk.svg" alt="Поделиться в VK" />
+              }
+              onClick={(event) => shareClick(event.currentTarget.id)}
+            ></AddButton>
+            <AddButton
+              id="tg"
+              className="button_share"
+              content={
+                <img
+                  src="src/assets/vector/telegram.svg"
+                  alt="Поделиться в Telegram"
+                />
+              }
+              onClick={(event) => shareClick(event.currentTarget.id)}
+            ></AddButton>
+            <AddButton
+              id="wp"
+              className="button_share"
+              content={
+                <img
+                  src="src/assets/vector/whatsapp.svg"
+                  alt="Поделиться в Whatsapp"
+                />
+              }
+              onClick={(event) => shareClick(event.currentTarget.id)}
+            ></AddButton>
+            <AddButton
+              id="fb"
+              className="button_share"
+              content={
+                <img
+                  src="src/assets/vector/facebook.svg"
+                  alt="Поделиться в Facebook"
+                />
+              }
+              onClick={(event) => shareClick(event.currentTarget.id)}
+            ></AddButton>
+          </Section>
+        )}
+
         {tasks.map((task) => (
-          <Fragment key ={task.id}>
+          <Fragment key={task.id}>
             <Section key={task.id + "w"} className={"task_window"}>
               {
                 <AddButton
@@ -235,7 +310,7 @@ function App() {
                 }
               </Section>
             )}
-          </Fragment >
+          </Fragment>
         ))}
       </main>
       <footer></footer>
