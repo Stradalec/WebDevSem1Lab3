@@ -192,7 +192,6 @@ textarea:focus {
 }
 
 .share_window {
-  display: none;
   position: fixed;
   top: 90%;
   height: 100px;

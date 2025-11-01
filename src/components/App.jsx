@@ -9,6 +9,7 @@ function App() {
   const [description, setDescription] = useState("");
   const [isPanelVisible, setPanelVisibility] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isShareVisible, setShareVisible] = useState(false);
   const [savedTaskId, setSavedTaskId] = useState(0)
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("tasks");
@@ -34,6 +35,12 @@ function App() {
     setModalVisible((prev) => !prev);
     setSavedTaskId(id);
   }
+
+  function changeShareVisibility(id){
+    setShareVisible((prev) => !prev)
+    setSavedTaskId(id)
+  }
+
   function ConfirmDeleteClick() {
     console.log("Attero, Dominatus!");
     setModalVisible((prev) => !prev);
@@ -95,9 +102,8 @@ function App() {
               onClick={() => CancelDeleteClick()}
             />
           </div>
-        </Section>)}
-        
-        <Section className={"share_window"}>
+        </Section>)}        
+        {isShareVisible && (<Section className={"share_window"} style={{ display: isShareVisible ? "flex" : "none" }}>
           <AddButton
             id="copy"
             className="button_share"
@@ -152,7 +158,8 @@ function App() {
           >
             {" "}
           </AddButton>
-        </Section>
+        </Section>)}
+        
         {tasks.map((task) => (
           <Fragment key ={task.id}>
             <Section key={task.id + "w"} className={"task_window"}>
@@ -223,6 +230,7 @@ function App() {
                         alt="Поделиться заметкой"
                       />
                     }
+                    onClick={() => changeShareVisibility(task.id)}
                   ></AddButton>
                 }
               </Section>
