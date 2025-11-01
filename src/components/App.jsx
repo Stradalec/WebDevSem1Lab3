@@ -1,5 +1,8 @@
 import { useEffect, useState, Fragment } from "react";
 import "./App.css";
+import "../styles/buttons.css";
+import "../styles/components.css";
+import "../styles/layout.css";
 import { InputColumn } from "./Input_column";
 import { AddButton } from "./addButton";
 import { Section } from "./sectionBuilder";
