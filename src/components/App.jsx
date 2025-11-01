@@ -3,6 +3,7 @@ import "./App.css";
 import { InputColumn } from "./Input_column";
 import { AddButton } from "./addButton";
 import { Section } from "./sectionBuilder";
+import { EditWindow } from "./editWindow";
 
 function App() {
   const [title, setTitle] = useState("");
@@ -10,6 +11,7 @@ function App() {
   const [isPanelVisible, setPanelVisibility] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isShareVisible, setShareVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const [savedTaskId, setSavedTaskId] = useState(0);
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("tasks");
@@ -40,10 +42,17 @@ function App() {
     setShareVisible((prev) => !prev);
     setSavedTaskId(id);
   }
+  function changeEditVisibility(id) {
+    const targetTask = tasks.find((task) => task.id == id);
+    setTitle(targetTask.title)
+    setDescription(targetTask.description)
+    setSavedTaskId(id);
+    setEditModalVisible(true);
+  }
 
   function shareClick(socialPlatform) {
-    let shareUrl
-    console.log(socialPlatform)
+    let shareUrl;
+    console.log(socialPlatform);
     console.log(savedTaskId);
     const targetTask = tasks.find((task) => task.id == savedTaskId);
     console.log(targetTask.title);
@@ -69,7 +78,7 @@ function App() {
           encodedDescription; //Оно не работает, т.к. поле комментария пустое. Я старался
         break;
       case "tg":
-        console.log("Попал в телеграм")
+        console.log("Попал в телеграм");
         shareUrl =
           "https://t.me/share/url?url=" +
           encodedStart +
@@ -97,13 +106,11 @@ function App() {
       default:
         return;
     }
-    if(socialPlatform != "copy"){
+    if (socialPlatform != "copy") {
       window.open(shareUrl, "_blank");
+    } else {
     }
-    else {
-      
-    } 
-    
+
     setSavedTaskId(-1);
     setShareVisible((prev) => !prev);
   }
@@ -127,7 +134,14 @@ function App() {
     console.log("I am only human, after all");
     setPanelVisibility((prev) => !prev);
   }
+function handleCancel() {
+  setEditModalVisible(false);
+}
 
+function handleSave(updatedTask) {
+  setTasks(tasks.map(task => (task.id === updatedTask.id ? updatedTask : task)));
+  setEditModalVisible(false);
+}
   return (
     <>
       <header></header>
@@ -281,6 +295,7 @@ function App() {
                         alt="Редактировать заметку"
                       />
                     }
+                    onClick={()=> changeEditVisibility(task.id)}
                   ></AddButton>
                 }
                 {
@@ -312,6 +327,15 @@ function App() {
             )}
           </Fragment>
         ))}
+        {editModalVisible && (
+          <EditWindow
+            id = {savedTaskId}
+            inputTitle={title}
+            inputDescription={description}
+            onCancel={() => handleCancel()}
+            onSave={(updatedTask) => handleSave(updatedTask)}
+          />
+        )}
       </main>
       <footer></footer>
     </>
