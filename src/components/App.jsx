@@ -9,6 +9,7 @@ import { Section } from "./SectionBuilder";
 import { EditWindow } from "./EditWindow";
 import { ShareSection } from "./ShareSection";
 import { ModalWindow } from "./ModalWindow";
+import { TaskSection } from "./TaskSection";
 
 function App() {
   const [title, setTitle] = useState("");
@@ -36,11 +37,6 @@ function App() {
     setTasks([...tasks, newTask]);
     setTitle("");
     setDescription("");
-  }
-
-  function changeModalVisibility(id) {
-    setSavedTaskId(id);
-    setModalVisible((prev) => !prev);
   }
 
   function changeShareVisibility(id) {
@@ -114,34 +110,12 @@ function App() {
 
         {tasks.map((task) => (
           <Fragment key={task.id}>
-            <Section key={task.id + "w"} className={"task_window"}>
-              {
-                <AddButton
-                  id={task.id + "m"}
-                  className="task_window_button"
-                  content={null}
-                  onClick={handleShowButtonsClick}
-                >
-                  {" "}
-                  <h2>{task.title}</h2>
-                  <p>{task.description}</p>{" "}
-                </AddButton>
-              }
-
-              {
-                <AddButton
-                  id={task.id + "d"}
-                  className="button_task_delete"
-                  content={
-                    <img
-                      src="src/assets/pictures/delete.svg"
-                      alt="Удалить заметку"
-                    />
-                  }
-                  onClick={() => changeModalVisibility(task.id)}
-                ></AddButton>
-              }
-            </Section>
+            <TaskSection inputTask={task}
+              setModalVisible={setModalVisible}
+              setPanelVisibility={setPanelVisibility}
+              setSavedTaskId={setSavedTaskId}>
+              
+            </TaskSection>
             {isPanelVisible == task.id && (
               <Section key={task.id + "p"} className={"input_row_right"}>
                 {
