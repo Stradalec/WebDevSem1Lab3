@@ -7,8 +7,9 @@ import { InputColumn } from "./InputColumn";
 import { AddButton } from "./AddButton";
 import { Section } from "./SectionBuilder";
 import { EditWindow } from "./EditWindow";
+import { ShareSection } from "./ShareSection";
 
-function App() {
+export function App() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isPanelVisible, setPanelVisibility] = useState(true);
@@ -47,75 +48,10 @@ function App() {
   }
   function changeEditVisibility(id) {
     const targetTask = tasks.find((task) => task.id == id);
-    setTitle(targetTask.title)
-    setDescription(targetTask.description)
+    setTitle(targetTask.title);
+    setDescription(targetTask.description);
     setSavedTaskId(id);
     setEditModalVisible(true);
-  }
-
-  function shareClick(socialPlatform) {
-    let shareUrl;
-    console.log(socialPlatform);
-    console.log(savedTaskId);
-    const targetTask = tasks.find((task) => task.id == savedTaskId);
-    console.log(targetTask.title);
-    const encodedStart = encodeURIComponent(
-      "Делитесь своими бессмысленными заметками вместе с нами!"
-    );
-    const encodedHeader = encodeURIComponent(targetTask.title);
-    const encodedDescription = encodeURIComponent(targetTask.description);
-    const encodedCloser = encodeURIComponent(
-      "Stradalets зачем-то добавил эту функциональность в свою лабораторную работу. Вот ему делать нечего..."
-    );
-    switch (socialPlatform) {
-      case "copy":
-        navigator.clipboard.writeText(
-          targetTask.title + " " + targetTask.description
-        );
-        break;
-      case "vk":
-        shareUrl =
-          "https://vk.com/share.php?text=" +
-          encodedHeader +
-          "%20" +
-          encodedDescription; //Оно не работает, т.к. поле комментария пустое. Я старался
-        break;
-      case "tg":
-        console.log("Попал в телеграм");
-        shareUrl =
-          "https://t.me/share/url?url=" +
-          encodedStart +
-          "&text=" +
-          encodedHeader +
-          " " +
-          encodedDescription +
-          "%0A" +
-          encodedCloser;
-        break;
-      case "wp":
-        shareUrl =
-          "https://api.whatsapp.com/send?text=" +
-          encodedHeader +
-          "%20" +
-          encodedDescription;
-        break;
-      case "fc":
-        shareUrl =
-          "https://www.facebook.com/sharer/sharer.php?u=" +
-          encodedHeader +
-          "&quote=" +
-          encodedDescription;
-        break;
-      default:
-        return;
-    }
-    if (socialPlatform != "copy") {
-      window.open(shareUrl, "_blank");
-    } else {
-    }
-
-    setSavedTaskId(-1);
-    setShareVisible((prev) => !prev);
   }
 
   function ConfirmDeleteClick() {
@@ -137,14 +73,16 @@ function App() {
     console.log("I am only human, after all");
     setPanelVisibility((prev) => !prev);
   }
-function handleCancel() {
-  setEditModalVisible(false);
-}
+  function handleCancel() {
+    setEditModalVisible(false);
+  }
 
-function handleSave(updatedTask) {
-  setTasks(tasks.map(task => (task.id === updatedTask.id ? updatedTask : task)));
-  setEditModalVisible(false);
-}
+  function handleSave(updatedTask) {
+    setTasks(
+      tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    );
+    setEditModalVisible(false);
+  }
   return (
     <>
       <main className="main">
@@ -170,10 +108,7 @@ function handleSave(updatedTask) {
           </Section>
         )}
         {isModalVisible && (
-          <Section
-            className={"dialog_window"}
-            style={{ display: isModalVisible ? "flex" : "none" }}
-          >
+          <Section className={"dialog_window"}>
             <p>Удалить задачу?</p>
             <div className="input_row_close">
               <AddButton
@@ -192,63 +127,11 @@ function handleSave(updatedTask) {
           </Section>
         )}
         {isShareVisible && (
-          <Section
-            className={"share_window"}
-            style={{ display: isShareVisible ? "flex" : "none" }}
-          >
-            <AddButton
-              id="copy"
-              className="button_share"
-              content={
-                <img
-                  src="src/assets/vector/copy.svg"
-                  alt="Копировать заметку"
-                />
-              }
-              onClick={(event) => shareClick(event.currentTarget.id)}
-            ></AddButton>
-            <AddButton
-              id="vk"
-              className="button_share"
-              content={
-                <img src="src/assets/vector/vk.svg" alt="Поделиться в VK" />
-              }
-              onClick={(event) => shareClick(event.currentTarget.id)}
-            ></AddButton>
-            <AddButton
-              id="tg"
-              className="button_share"
-              content={
-                <img
-                  src="src/assets/vector/telegram.svg"
-                  alt="Поделиться в Telegram"
-                />
-              }
-              onClick={(event) => shareClick(event.currentTarget.id)}
-            ></AddButton>
-            <AddButton
-              id="wp"
-              className="button_share"
-              content={
-                <img
-                  src="src/assets/vector/whatsapp.svg"
-                  alt="Поделиться в Whatsapp"
-                />
-              }
-              onClick={(event) => shareClick(event.currentTarget.id)}
-            ></AddButton>
-            <AddButton
-              id="fb"
-              className="button_share"
-              content={
-                <img
-                  src="src/assets/vector/facebook.svg"
-                  alt="Поделиться в Facebook"
-                />
-              }
-              onClick={(event) => shareClick(event.currentTarget.id)}
-            ></AddButton>
-          </Section>
+          <ShareSection
+            inputTaskId={savedTaskId}
+            inputTaskList={tasks}
+            setShareVisible={setShareVisible}
+          ></ShareSection>
         )}
 
         {tasks.map((task) => (
@@ -282,11 +165,7 @@ function handleSave(updatedTask) {
               }
             </Section>
             {isPanelVisible == task.id && (
-              <Section
-                key={task.id + "p"}
-                className={"input_row_right"}
-                style={{ display: isPanelVisible ? "flex" : "none" }}
-              >
+              <Section key={task.id + "p"} className={"input_row_right"}>
                 {
                   <AddButton
                     id={task.id + "e"}
@@ -297,7 +176,7 @@ function handleSave(updatedTask) {
                         alt="Редактировать заметку"
                       />
                     }
-                    onClick={()=> changeEditVisibility(task.id)}
+                    onClick={() => changeEditVisibility(task.id)}
                   ></AddButton>
                 }
                 {
@@ -331,7 +210,7 @@ function handleSave(updatedTask) {
         ))}
         {editModalVisible && (
           <EditWindow
-            id = {savedTaskId}
+            id={savedTaskId}
             inputTitle={title}
             inputDescription={description}
             onCancel={() => handleCancel()}
@@ -343,5 +222,5 @@ function handleSave(updatedTask) {
     </>
   );
 }
-
+//
 export default App;
