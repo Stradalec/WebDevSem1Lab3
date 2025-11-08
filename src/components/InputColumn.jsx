@@ -1,4 +1,9 @@
-export function InputColumn({ titleValue, descriptionValue, onTitleChange, onDescriptionChange }) {
+export function InputColumn({
+  titleValue,
+  descriptionValue,
+  onTitleChange,
+  onDescriptionChange,
+}) {
   return (
     <div className="input_column">
       <input

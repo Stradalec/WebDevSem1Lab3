@@ -65,13 +65,11 @@ function App() {
           </Section>
         )}
         {isModalVisible && (
-          <ModalWindow 
+          <ModalWindow
             inputTaskId={savedTaskId}
-            inputTaskList={tasks}
             setModalVisible={setModalVisible}
-            setTasks={setTasks}>
-            
-            </ModalWindow>
+            setTasks={setTasks}
+          ></ModalWindow>
         )}
         {isShareVisible && (
           <ShareSection
@@ -83,38 +81,35 @@ function App() {
 
         {tasks.map((task) => (
           <Fragment key={task.id}>
-            <TaskSection inputTask={task}
+            <TaskSection
+              inputTask={task}
               setModalVisible={setModalVisible}
               setPanelVisibility={setPanelVisibility}
-              setSavedTaskId={setSavedTaskId}>
-              
-            </TaskSection>
+              setSavedTaskId={setSavedTaskId}
+            ></TaskSection>
             {isPanelVisible == task.id && (
               <TaskButtonPanel
-              inputTask={task}
-              inputTaskList={tasks}
-              setEditModalVisible={setEditModalVisible}
-              setTitle={setTitle}
-              setDescription={setDescription}
-              setShareVisible={setShareVisible}
-              setSavedTaskId={setSavedTaskId}>
-                
-              </TaskButtonPanel>
-              
+                inputTask={task}
+                inputTaskList={tasks}
+                setEditModalVisible={setEditModalVisible}
+                setTitle={setTitle}
+                setDescription={setDescription}
+                setShareVisible={setShareVisible}
+                setSavedTaskId={setSavedTaskId}
+              ></TaskButtonPanel>
             )}
             {editModalVisible && (
-          <EditWindow
-            inputTask={task}
-            inputTitle={title}
-            inputDescription={description}
-            setEditModalVisible={setEditModalVisible}
-            setTasks={setTasks}
-            inputTaskList={tasks}
-          />
-        )}
+              <EditWindow
+                inputTask={task}
+                inputTitle={title}
+                inputDescription={description}
+                setEditModalVisible={setEditModalVisible}
+                setTasks={setTasks}
+                inputTaskList={tasks}
+              />
+            )}
           </Fragment>
         ))}
-        
       </main>
       <footer></footer>
     </>

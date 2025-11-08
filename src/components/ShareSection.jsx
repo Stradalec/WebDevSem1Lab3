@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { AddButton } from "./AddButton";
 import { Section } from "./SectionBuilder";
-export function ShareSection({inputTaskId, inputTaskList, setShareVisible}) {
-    const [taskId, setTaskId] = useState(inputTaskId || "");
-    const [taskList, setTaskList] = useState(inputTaskList|| "");
+export function ShareSection({ inputTaskId, inputTaskList, setShareVisible }) {
+  const [taskId, setTaskId] = useState(inputTaskId || "");
+  const [taskList, setTaskList] = useState(inputTaskList || "");
   function shareClick(socialPlatform) {
     let shareUrl;
-    console.log("Тяжесть бытия")
+    console.log("Тяжесть бытия");
     console.log(socialPlatform);
     console.log(taskId);
     const targetTask = taskList.find((task) => task.id == taskId);
