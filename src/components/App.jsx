@@ -8,8 +8,9 @@ import { AddButton } from "./AddButton";
 import { Section } from "./SectionBuilder";
 import { EditWindow } from "./EditWindow";
 import { ShareSection } from "./ShareSection";
+import { ModalWindow } from "./ModalWindow";
 
-export function App() {
+function App() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isPanelVisible, setPanelVisibility] = useState(true);
@@ -38,8 +39,8 @@ export function App() {
   }
 
   function changeModalVisibility(id) {
-    setModalVisible((prev) => !prev);
     setSavedTaskId(id);
+    setModalVisible((prev) => !prev);
   }
 
   function changeShareVisibility(id) {
@@ -54,20 +55,7 @@ export function App() {
     setEditModalVisible(true);
   }
 
-  function ConfirmDeleteClick() {
-    console.log("Attero, Dominatus!");
-    setModalVisible((prev) => !prev);
-    const newTaskList = setTasks((currentTasks) =>
-      currentTasks.filter((task) => task.id !== savedTaskId)
-    );
-    setSavedTaskId(-1);
-    localStorage.setItem("tasks", JSON.stringify(newTaskList));
-  }
-
-  function CancelDeleteClick() {
-    setSavedTaskId(-1);
-    setModalVisible((prev) => !prev);
-  }
+  
 
   function handleShowButtonsClick() {
     console.log("I am only human, after all");
@@ -108,23 +96,13 @@ export function App() {
           </Section>
         )}
         {isModalVisible && (
-          <Section className={"dialog_window"}>
-            <p>Удалить задачу?</p>
-            <div className="input_row_close">
-              <AddButton
-                id="delete_confirm"
-                className="button_dialog"
-                content={"Да"}
-                onClick={() => ConfirmDeleteClick()}
-              />
-              <AddButton
-                id="delete_cancel"
-                className="button_dialog"
-                content={"Нет"}
-                onClick={() => CancelDeleteClick()}
-              />
-            </div>
-          </Section>
+          <ModalWindow 
+            inputTaskId={savedTaskId}
+            inputTaskList={tasks}
+            setModalVisible={setModalVisible}
+            setTasks={setTasks}>
+            
+            </ModalWindow>
         )}
         {isShareVisible && (
           <ShareSection
