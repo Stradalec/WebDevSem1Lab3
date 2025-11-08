@@ -40,16 +40,6 @@ function App() {
     setDescription("");
   }
 
-  function handleCancel() {
-    setEditModalVisible(false);
-  }
-
-  function handleSave(updatedTask) {
-    setTasks(
-      tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
-    );
-    setEditModalVisible(false);
-  }
   return (
     <>
       <main className="main">
@@ -112,17 +102,19 @@ function App() {
               </TaskButtonPanel>
               
             )}
-          </Fragment>
-        ))}
-        {editModalVisible && (
+            {editModalVisible && (
           <EditWindow
-            id={savedTaskId}
+            inputTask={task}
             inputTitle={title}
             inputDescription={description}
-            onCancel={() => handleCancel()}
-            onSave={(updatedTask) => handleSave(updatedTask)}
+            setEditModalVisible={setEditModalVisible}
+            setTasks={setTasks}
+            inputTaskList={tasks}
           />
         )}
+          </Fragment>
+        ))}
+        
       </main>
       <footer></footer>
     </>
