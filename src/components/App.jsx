@@ -3,10 +3,10 @@ import "./App.css";
 import "../styles/buttons.css";
 import "../styles/components.css";
 import "../styles/layout.css";
-import { InputColumn } from "./Input_column";
-import { AddButton } from "./addButton";
-import { Section } from "./sectionBuilder";
-import { EditWindow } from "./editWindow";
+import { InputColumn } from "./InputColumn";
+import { AddButton } from "./AddButton";
+import { Section } from "./SectionBuilder";
+import { EditWindow } from "./EditWindow";
 
 function App() {
   const [title, setTitle] = useState("");
@@ -147,7 +147,6 @@ function handleSave(updatedTask) {
 }
   return (
     <>
-      <header></header>
       <main className="main">
         <Section className={"input_row"}>
           <InputColumn
