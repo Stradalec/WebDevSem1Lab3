@@ -10,6 +10,7 @@ import { EditWindow } from "./EditWindow";
 import { ShareSection } from "./ShareSection";
 import { ModalWindow } from "./ModalWindow";
 import { TaskSection } from "./TaskSection";
+import { TaskButtonPanel } from "./TaskButtonPanel";
 
 function App() {
   const [title, setTitle] = useState("");
@@ -39,24 +40,6 @@ function App() {
     setDescription("");
   }
 
-  function changeShareVisibility(id) {
-    setShareVisible((prev) => !prev);
-    setSavedTaskId(id);
-  }
-  function changeEditVisibility(id) {
-    const targetTask = tasks.find((task) => task.id == id);
-    setTitle(targetTask.title);
-    setDescription(targetTask.description);
-    setSavedTaskId(id);
-    setEditModalVisible(true);
-  }
-
-  
-
-  function handleShowButtonsClick() {
-    console.log("I am only human, after all");
-    setPanelVisibility((prev) => !prev);
-  }
   function handleCancel() {
     setEditModalVisible(false);
   }
@@ -117,46 +100,17 @@ function App() {
               
             </TaskSection>
             {isPanelVisible == task.id && (
-              <Section key={task.id + "p"} className={"input_row_right"}>
-                {
-                  <AddButton
-                    id={task.id + "e"}
-                    className="button_task_edit"
-                    content={
-                      <img
-                        src="src/assets/pictures/edit.svg"
-                        alt="Редактировать заметку"
-                      />
-                    }
-                    onClick={() => changeEditVisibility(task.id)}
-                  ></AddButton>
-                }
-                {
-                  <AddButton
-                    id={task.id + "i"}
-                    className="button_task_info"
-                    content={
-                      <img
-                        src="src/assets/pictures/info.svg"
-                        alt="Информация о заметке"
-                      />
-                    }
-                  ></AddButton>
-                }
-                {
-                  <AddButton
-                    id={task.id + "s"}
-                    className="button_task_share"
-                    content={
-                      <img
-                        src="src/assets/pictures/share.svg"
-                        alt="Поделиться заметкой"
-                      />
-                    }
-                    onClick={() => changeShareVisibility(task.id)}
-                  ></AddButton>
-                }
-              </Section>
+              <TaskButtonPanel
+              inputTask={task}
+              inputTaskList={tasks}
+              setEditModalVisible={setEditModalVisible}
+              setTitle={setTitle}
+              setDescription={setDescription}
+              setShareVisible={setShareVisible}
+              setSavedTaskId={setSavedTaskId}>
+                
+              </TaskButtonPanel>
+              
             )}
           </Fragment>
         ))}

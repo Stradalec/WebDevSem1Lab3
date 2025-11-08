@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-export function EditWindow({ id,inputTitle, inputDescription, onCancel, onSave }) {
+export function EditWindow({ id, inputTitle, inputDescription, onCancel, onSave }) {
   console.log(inputTitle, inputDescription);
   const [title, setTitle] = useState(inputTitle || "");
   const [description, setDescription] = useState(inputDescription || "");
