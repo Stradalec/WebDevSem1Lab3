@@ -9,7 +9,7 @@ export function TaskSection({
 }) {
   function handleShowButtonsClick() {
     console.log("I am only human, after all");
-    setPanelVisibility((prev) => !prev);
+    setPanelVisibility((prev) => (prev=== inputTask.id ? null : inputTask.id));
   }
   function changeModalVisibility(id) {
     setSavedTaskId(id);

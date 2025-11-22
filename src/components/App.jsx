@@ -15,7 +15,7 @@ import { TaskButtonPanel } from "./TaskButtonPanel";
 function App() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [isPanelVisible, setPanelVisibility] = useState(true);
+  const [isPanelVisible, setPanelVisibility] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isShareVisible, setShareVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
