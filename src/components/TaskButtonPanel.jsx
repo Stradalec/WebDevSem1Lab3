@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { concreteTask } from "./TasksSlice";
+import { useDispatch } from "react-redux";
 import { AddButton } from "./AddButton";
 import { Section } from "./SectionBuilder";
 export function TaskButtonPanel({
@@ -10,6 +12,10 @@ export function TaskButtonPanel({
   setShareVisible,
   setSavedTaskId,
 }) {
+  const dispatch = useDispatch();
+  const handleConcreteTask = () => {
+    dispatch(concreteTask({ id: inputTask.id }));
+  };
   function changeShareVisibility(id) {
     setShareVisible((prev) => !prev);
     setSavedTaskId(id);
@@ -46,6 +52,7 @@ export function TaskButtonPanel({
               alt="Информация о заметке"
             />
           }
+          onClick={handleConcreteTask}
         ></AddButton>
       }
       {

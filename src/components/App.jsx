@@ -1,6 +1,6 @@
 import { useEffect, useState, Fragment } from "react";
 import { useDispatch, useSelector} from "react-redux";
-import { addTask, moveTask   } from "./TasksSlice";
+import { addTask, moveTask} from "./TasksSlice";
 import "./App.css";
 import "../styles/buttons.css";
 import "../styles/components.css";
@@ -42,7 +42,7 @@ function App() {
   const handleDragOver = (event) => {
     event.preventDefault(); 
   };
-
+  
   const handleDrop = (event, toIndex) => {
     event.preventDefault();
     const fromIndex = parseInt(event.dataTransfer.getData("fromIndex"), 10);
