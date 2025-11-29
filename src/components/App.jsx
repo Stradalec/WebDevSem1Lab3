@@ -1,4 +1,6 @@
 import { useEffect, useState, Fragment } from "react";
+import { useDispatch, useSelector} from "react-redux";
+import { addTask } from "./TasksSlice";
 import "./App.css";
 import "../styles/buttons.css";
 import "../styles/components.css";
@@ -20,22 +22,17 @@ function App() {
   const [isShareVisible, setShareVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [savedTaskId, setSavedTaskId] = useState(0);
-  const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem("tasks");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const tasks = useSelector(state => state.tasks); 
+  const dispatch = useDispatch();
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
   function handleAddClick() {
     console.log("Нажми на кнопку - получишь результат");
-    const newTask = {
-      id: tasks.length,
-      title: title || "Неизвестен",
-      description: description || "Без названия",
-    };
+    
+    dispatch(addTask({ title: title, description: description }));
 
-    setTasks([...tasks, newTask]);
+    //setTasks([...tasks, newTask]);
     setTitle("");
     setDescription("");
   }
@@ -68,7 +65,6 @@ function App() {
           <ModalWindow
             inputTaskId={savedTaskId}
             setModalVisible={setModalVisible}
-            setTasks={setTasks}
           ></ModalWindow>
         )}
         {isShareVisible && (
@@ -104,7 +100,6 @@ function App() {
                 inputTitle={title}
                 inputDescription={description}
                 setEditModalVisible={setEditModalVisible}
-                setTasks={setTasks}
                 inputTaskList={tasks}
               />
             )}

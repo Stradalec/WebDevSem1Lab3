@@ -4,7 +4,6 @@ export function EditWindow({
   inputTitle,
   inputDescription,
   setEditModalVisible,
-  setTasks,
   inputTaskList,
 }) {
   console.log(inputTitle, inputDescription);
@@ -22,9 +21,9 @@ export function EditWindow({
   function handleSave(inputTask) {
     inputTask.title = title;
     inputTask.description = description;
-    setTasks(
-      inputTaskList.map((task) => (task.id === inputTask.id ? inputTask : task))
-    );
+    //setTasks(
+      //inputTaskList.map((task) => (task.id === inputTask.id ? inputTask : task))
+    //);
     setEditModalVisible(false);
   }
   return (

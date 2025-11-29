@@ -1,18 +1,18 @@
 import { AddButton } from "./AddButton";
 import { Section } from "./SectionBuilder";
+import { useDispatch, useSelector} from "react-redux";
+import { deleteTask } from "./TasksSlice";
 export function ModalWindow({
   inputTaskId,
-  setModalVisible,
-  setTasks,
+  setModalVisible
 }) {
+  const dispatch = useDispatch();
   function ConfirmDeleteClick() {
     console.log("Attero, Dominatus!");
+    
+    dispatch(deleteTask(inputTaskId));
     setModalVisible((prev) => !prev);
     console.log(inputTaskId);
-    const newTaskList = setTasks((currentTasks) =>
-      currentTasks.filter((task) => task.id !== inputTaskId)
-    );
-    localStorage.setItem("tasks", JSON.stringify(newTaskList));
   }
 
   function CancelDeleteClick() {
