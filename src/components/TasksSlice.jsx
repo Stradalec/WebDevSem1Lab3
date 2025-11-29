@@ -25,8 +25,14 @@ export const TaskSlice = createSlice({
         task.title = title || task.title; 
         task.description = description || task.description;
       }
+    },
+    moveTask: (state, action) => {
+      const { fromIndex, toIndex } = action.payload;
+      const task = state[fromIndex];
+      state.splice(fromIndex, 1);
+      state.splice(toIndex, 0, task);
     }
   },
 });
-export const { addTask, deleteTask, editTask } = TaskSlice.actions;
+export const { addTask, deleteTask, editTask, moveTask } = TaskSlice.actions;
 export default TaskSlice.reducer;

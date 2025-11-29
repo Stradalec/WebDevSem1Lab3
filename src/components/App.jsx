@@ -1,6 +1,6 @@
 import { useEffect, useState, Fragment } from "react";
 import { useDispatch, useSelector} from "react-redux";
-import { addTask } from "./TasksSlice";
+import { addTask, moveTask   } from "./TasksSlice";
 import "./App.css";
 import "../styles/buttons.css";
 import "../styles/components.css";
@@ -35,6 +35,21 @@ function App() {
     setTitle("");
     setDescription("");
   }
+  const handleDragStart = (event, index) => {
+    event.dataTransfer.setData("fromIndex", index);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault(); 
+  };
+
+  const handleDrop = (event, toIndex) => {
+    event.preventDefault();
+    const fromIndex = parseInt(event.dataTransfer.getData("fromIndex"), 10);
+    if (fromIndex !== toIndex) {
+      dispatch(moveTask({ fromIndex, toIndex }));
+    }
+  };
 
   return (
     <>
@@ -43,8 +58,8 @@ function App() {
           <InputColumn
             titleValue={title}
             descriptionValue={description}
-            onTitleChange={(e) => setTitle(e.target.value)}
-            onDescriptionChange={(e) => setDescription(e.target.value)}
+            onTitleChange={(event) => setTitle(event.target.value)}
+            onDescriptionChange={(event) => setDescription(event.target.value)}
           />
           <AddButton
             id="add"
@@ -74,14 +89,21 @@ function App() {
           ></ShareSection>
         )}
 
-        {tasks.map((task) => (
+        {tasks.map((task, index) => (
           <Fragment key={task.id}>
+            <div
+              draggable
+              onDragStart={(event) => handleDragStart(event, index)}
+              onDragOver={handleDragOver}
+              onDrop={(event) => handleDrop(event, index)}
+            >
             <TaskSection
               inputTask={task}
               setModalVisible={setModalVisible}
               setPanelVisibility={setPanelVisibility}
               setSavedTaskId={setSavedTaskId}
             ></TaskSection>
+            </div>
             {isPanelVisible == task.id && (
               <TaskButtonPanel
                 inputTask={task}
@@ -93,6 +115,7 @@ function App() {
                 setSavedTaskId={setSavedTaskId}
               ></TaskButtonPanel>
             )}
+            
             {editModalVisible && (
               <EditWindow
                 inputTask={task}
