@@ -32,7 +32,6 @@ function App() {
     
     dispatch(addTask({ title: title, description: description }));
 
-    //setTasks([...tasks, newTask]);
     setTitle("");
     setDescription("");
   }
@@ -100,7 +99,6 @@ function App() {
                 inputTitle={title}
                 inputDescription={description}
                 setEditModalVisible={setEditModalVisible}
-                inputTaskList={tasks}
               />
             )}
           </Fragment>
