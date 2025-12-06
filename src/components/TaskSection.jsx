@@ -15,8 +15,9 @@ export function TaskSection({
     setSavedTaskId(id);
     setModalVisible((prev) => !prev);
   }
+  const taskClassName = inputTask.concreted ? "task_window_pin" : "task_window";
   return (
-    <Section key={inputTask.id + "w"} className={"task_window"}>
+    <Section key={inputTask.id + "w"} className={taskClassName}>
       {
         <AddButton
           id={inputTask.id + "m"}

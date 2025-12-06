@@ -23,7 +23,8 @@ input:focus {
 .edit_window,
 .dialog_window,
 .share_window,
-.task_window {
+.task_window,
+.task_window_pin {
   display: flex;
   flex-direction: column;
   background-color: #1b1a17;
@@ -74,7 +75,8 @@ textarea:focus {
 .dialog_window p {
   margin: auto;
 }
-.task_window {
+.task_window,
+.task_window_pin {
   padding: 15px 30px;
   height: 140px;
   justify-content: space-between;
@@ -82,7 +84,9 @@ textarea:focus {
   flex-direction: row;
   gap: 15px;
 }
-
+.task_window_pin {
+  background-color: #4a4a4b;
+}
 .share_window {
   position: fixed;
   top: 90%;
