@@ -85,7 +85,16 @@ textarea:focus {
   gap: 15px;
 }
 .task_window_pin {
-  background-color: #4a4a4b;
+  background: radial-gradient(#1b1a17, #3a3936, #777673, #f0e3ca);
+  background-repeat: no-repeat; 
+  background-size: 500%;
+  background-position: center;
+  animation: background 4s infinite alternate;
+}
+@keyframes background {
+  100% {
+    background-size: 100%;
+  }
 }
 .share_window {
   position: fixed;
