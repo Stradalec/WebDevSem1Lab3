@@ -1,4 +1,6 @@
 import { useEffect, useState, Fragment } from "react";
+import { useDispatch, useSelector} from "react-redux";
+import { addTask, moveTask} from "./TasksSlice";
 import "./App.css";
 import "../styles/buttons.css";
 import "../styles/components.css";
@@ -20,25 +22,34 @@ function App() {
   const [isShareVisible, setShareVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [savedTaskId, setSavedTaskId] = useState(0);
-  const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem("tasks");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const tasks = useSelector(state => state.tasks); 
+  const dispatch = useDispatch();
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
   function handleAddClick() {
     console.log("Нажми на кнопку - получишь результат");
-    const newTask = {
-      id: tasks.length,
-      title: title || "Неизвестен",
-      description: description || "Без названия",
-    };
+    
+    dispatch(addTask({ title: title, description: description }));
 
-    setTasks([...tasks, newTask]);
     setTitle("");
     setDescription("");
   }
+  const handleDragStart = (event, index) => {
+    event.dataTransfer.setData("fromIndex", index);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault(); 
+  };
+  
+  const handleDrop = (event, toIndex) => {
+    event.preventDefault();
+    const fromIndex = parseInt(event.dataTransfer.getData("fromIndex"), 10);
+    if (fromIndex !== toIndex) {
+      dispatch(moveTask({ fromIndex, toIndex }));
+    }
+  };
 
   return (
     <>
@@ -47,8 +58,8 @@ function App() {
           <InputColumn
             titleValue={title}
             descriptionValue={description}
-            onTitleChange={(e) => setTitle(e.target.value)}
-            onDescriptionChange={(e) => setDescription(e.target.value)}
+            onTitleChange={(event) => setTitle(event.target.value)}
+            onDescriptionChange={(event) => setDescription(event.target.value)}
           />
           <AddButton
             id="add"
@@ -68,7 +79,6 @@ function App() {
           <ModalWindow
             inputTaskId={savedTaskId}
             setModalVisible={setModalVisible}
-            setTasks={setTasks}
           ></ModalWindow>
         )}
         {isShareVisible && (
@@ -79,14 +89,21 @@ function App() {
           ></ShareSection>
         )}
 
-        {tasks.map((task) => (
+        {tasks.map((task, index) => (
           <Fragment key={task.id}>
+            <div
+              draggable
+              onDragStart={(event) => handleDragStart(event, index)}
+              onDragOver={handleDragOver}
+              onDrop={(event) => handleDrop(event, index)}
+            >
             <TaskSection
               inputTask={task}
               setModalVisible={setModalVisible}
               setPanelVisibility={setPanelVisibility}
               setSavedTaskId={setSavedTaskId}
             ></TaskSection>
+            </div>
             {isPanelVisible == task.id && (
               <TaskButtonPanel
                 inputTask={task}
@@ -98,14 +115,13 @@ function App() {
                 setSavedTaskId={setSavedTaskId}
               ></TaskButtonPanel>
             )}
+            
             {editModalVisible && (
               <EditWindow
                 inputTask={task}
                 inputTitle={title}
                 inputDescription={description}
                 setEditModalVisible={setEditModalVisible}
-                setTasks={setTasks}
-                inputTaskList={tasks}
               />
             )}
           </Fragment>

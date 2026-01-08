@@ -9,14 +9,15 @@ export function TaskSection({
 }) {
   function handleShowButtonsClick() {
     console.log("I am only human, after all");
-    setPanelVisibility((prev) => (prev=== inputTask.id ? null : inputTask.id));
+    setPanelVisibility((prev) => (prev === inputTask.id ? null : inputTask.id));
   }
   function changeModalVisibility(id) {
     setSavedTaskId(id);
     setModalVisible((prev) => !prev);
   }
+  const taskClassName = inputTask.concreted ? "task_window_pin" : "task_window";
   return (
-    <Section key={inputTask.id + "w"} className={"task_window"}>
+    <Section key={inputTask.id + "w"} className={taskClassName}>
       {
         <AddButton
           id={inputTask.id + "m"}

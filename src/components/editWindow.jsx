@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
+import { editTask } from "./TasksSlice";
+import { useDispatch } from "react-redux";
 export function EditWindow({
   inputTask,
   inputTitle,
   inputDescription,
   setEditModalVisible,
-  setTasks,
-  inputTaskList,
 }) {
+  const dispatch = useDispatch();
   console.log(inputTitle, inputDescription);
   const [title, setTitle] = useState(inputTitle || "");
   const [description, setDescription] = useState(inputDescription || "");
@@ -20,11 +21,7 @@ export function EditWindow({
   }
 
   function handleSave(inputTask) {
-    inputTask.title = title;
-    inputTask.description = description;
-    setTasks(
-      inputTaskList.map((task) => (task.id === inputTask.id ? inputTask : task))
-    );
+    dispatch(editTask({id: inputTask.id,title: title, description: description}));
     setEditModalVisible(false);
   }
   return (
